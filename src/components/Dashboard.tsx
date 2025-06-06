@@ -1,10 +1,16 @@
 import { useAuth } from "../context/AuthContext"
 
 const Dashboard = () => {
-    const {user} = useAuth()
+    const {user, logout} = useAuth();
+
+    const handlelogout = () => {
+        logout();
+    }
+
     return (
         <>
-            Welcome {user}
+            Welcome {user?.username}
+            <button type="button" onClick={handlelogout}>Logout</button>
         </>
     )
 }

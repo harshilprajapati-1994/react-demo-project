@@ -1,26 +1,43 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
-    user: string | null,
+    user: userTypedata | null,
     login: (para: string) => void,
-    logout: () => void
+    logout: () => void,
+    loading: boolean
+}
+
+interface userTypedata {
+    username: string
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthContextProvider = ({children}: {children: ReactNode}) => {
-    const [user, setuser] = useState<string | null>(null);
+    const [user, setuser] = useState<userTypedata | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const storedata = localStorage.getItem("user");
+        if(storedata) {
+            setuser(JSON.parse(storedata));
+        }
+        setLoading(false)
+    }, [])
 
     const login = (username: string) => {
-        setuser(username);
+        const userdata = {username}
+        setuser(userdata);
+        localStorage.setItem("user", JSON.stringify(userdata))
     }
 
     const logout = () => {
         setuser(null);
+        localStorage.removeItem("user")
     }
 
     return (
-        <AuthContext.Provider value={{user, login, logout}}>
+        <AuthContext.Provider value={{user, login, logout, loading}}>
             {children}
         </AuthContext.Provider>
     )
