@@ -1,30 +1,27 @@
 
-import { useTodos } from "./hooks/useTodos";
-import Addtodo from './components/Addtodo';
-import TodoList from './components/TodoList'
-import { useState } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import {AuthContextProvider} from './context/AuthContext';
+import Login from './components/Login';
+import Protected from './components/Protected'
+import Dashboard from './components/Dashboard';
 
-function App() {
-  const { todos, dispatch } = useTodos();
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
-
-  const filteredTodos = todos.filter((todo) => {
-    if (filter === 'active') return !todo.completed;
-    if (filter === 'completed') return todo.completed;
-    return true;
-  });
-
-
+const App = () => {
   return (
     <>
-      <h1>Todo App</h1>
-      <Addtodo dispatch={dispatch} />
-      <div style={{ marginTop: '1rem' }}>
-        <button onClick={() => setFilter('all')}>All</button>
-        <button onClick={() => setFilter('active')}>Active</button>
-        <button onClick={() => setFilter('completed')}>Completed</button>
-      </div>
-      <TodoList todos={filteredTodos} dispatch={dispatch} />
+      <AuthContextProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/login" element={<Login/>} />
+              <Route path="/dashboard" element={
+                <Protected>
+                  <Dashboard />
+                </Protected>
+              } />
+               <Route path="*" element={<Navigate to="/login" replace />} />
+              
+            </Routes>
+          </BrowserRouter>
+      </AuthContextProvider>
     </>
   )
 }
