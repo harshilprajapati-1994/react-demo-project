@@ -1,50 +1,36 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
-interface AuthContextType {
-    user: userTypedata | null,
-    login: (para: string) => void,
-    logout: () => void,
-    loading: boolean
-}
-
-interface userTypedata {
-    username: string
-}
+type User = { email: string };
+type AuthContextType = {
+  user: User | null;
+  login: (email: string) => void;
+  logout: () => void;
+};
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthContextProvider = ({children}: {children: ReactNode}) => {
-    const [user, setuser] = useState<userTypedata | null>(null);
-    const [loading, setLoading] = useState(true);
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<User | null>(() => {
+    const stored = localStorage.getItem("user");
+    return stored ? JSON.parse(stored) : null;
+  });
 
-    useEffect(() => {
-        const storedata = localStorage.getItem("user");
-        if(storedata) {
-            setuser(JSON.parse(storedata));
-        }
-        setLoading(false)
-    }, [])
+  const login = (email: string) => {
+    const userData = { email };
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+  };
 
-    const login = (username: string) => {
-        const userdata = {username}
-        setuser(userdata);
-        localStorage.setItem("user", JSON.stringify(userdata))
-    }
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+  };
 
-    const logout = () => {
-        setuser(null);
-        localStorage.removeItem("user")
-    }
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
-    return (
-        <AuthContext.Provider value={{user, login, logout, loading}}>
-            {children}
-        </AuthContext.Provider>
-    )
-}
-
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if(!context) throw new Error('AuthContext is not available');
-    return context;
-}
+export const useAuth = () => useContext(AuthContext)!;

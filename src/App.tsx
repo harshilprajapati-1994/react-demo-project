@@ -1,29 +1,33 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Cart from './pages/Cart';
+import ProductPage from './pages/ProductPage';
+import { CartProvider } from './context/CartContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Header from './common/Header';
+import Checkout from './pages/Checkout';
+import Success from './pages/Success';
 
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import {AuthContextProvider} from './context/AuthContext';
-import Login from './components/Login';
-import Protected from './components/Protected'
-import Dashboard from './components/Dashboard';
+const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <>
-      <AuthContextProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/login" element={<Login/>} />
-              <Route path="/dashboard" element={
-                <Protected>
-                  <Dashboard />
-                </Protected>
-              } />
-               <Route path="*" element={<Navigate to="/login" replace />} />
-              
-            </Routes>
-          </BrowserRouter>
-      </AuthContextProvider>
-    </>
-  )
-}
+    <QueryClientProvider client={queryClient}>
+      <CartProvider>
+        <BrowserRouter>
+          <Header/>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/product/:id" element={<ProductPage />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/success" element={<Success />} />
+          </Routes>
+          
+        </BrowserRouter>
+      </CartProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
