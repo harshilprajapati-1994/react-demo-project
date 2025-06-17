@@ -29,6 +29,7 @@ const Checkout = () => {
   return (
     <div className="container">
       <h2>Checkout</h2>
+      <p>₹{state.cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}</p>
       <button onClick={() => mutation.mutate(state.cartItems)}>Place Order</button>
     </div>
   );
