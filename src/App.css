@@ -95,3 +95,22 @@ img{
 .product-detail img {
     max-height: 500px;
 }
+.cart-item-detail{
+  display: flex;
+  gap: 10px;
+}
+
+.cart-item-detail img{
+  max-width: 100px;
+}
+
+.checkout-btn{
+  text-align: right;
+  margin: 10px 0 0;
+}
+.checkout-btn a{
+  background: #000;
+  color: #fff;
+  padding: 5px 10px;
+  display: inline-block;
+}

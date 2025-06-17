@@ -1,70 +1,54 @@
-import { useCart } from "../context/CartContext";
-
+import { useCart } from '../context/CartContext';
+import { Link } from 'react-router-dom';
 
 const Cart = () => {
-    const {state, dispatch} = useCart();
+  const { state, dispatch } = useCart();
 
-     if (state.cartItems.length === 0) {
-        return <p>No items in your cart</p>;
-    }
+  if (state.cartItems.length === 0) return <p>No items in cart</p>;
 
-    return (
-        <div className="container">
-            <table className="cart-table">
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Total</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {state.cartItems.map((item) => {
-                        console.log(item)
-                        return <tr key={item.id}>
-                            <td width="400">
-                                <div className="cart-product">
-                                    <img src={item.image} />
-                                    <div className="cart-product-info">
-                                        <label>{item.title}</label>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                {item.quantity}
-                                <div className="quantity_update">
-                                    <button onClick={() => dispatch({type: 'QuantityIncrease', payload: item.id})}>+</button>
-                                    <button onClick={() => dispatch({type: 'QuantityDecrease', payload: item.id})}>-</button>
-                                </div>
-                            </td>
-                            <td>
-                                {item.price}
-                            </td>
-                            <td>
-                                {item.quantity * item.price}
-                            </td>
-                            <td>
-                                <button onClick={() => dispatch({type: "REMOVE_FROM_CART", payload: item.id})}>
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    })}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colSpan={3}>
-                            Total
-                        </td>
-                        <td>{state.cartItems.reduce((acc, item) => acc + item.quantity * item.price, 0).toFixed(2)}</td>
-                        <td></td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    )
-}
+  console.log(state.cartItems)
 
-export default Cart
+  return (
+    <div className="container">
+      <table className='cart-table'>
+        <thead>
+          <tr>
+            <th>Product</th><th>Qty</th><th>Price</th><th>Total</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {state.cartItems.map(item => (
+            <tr key={item.id}>
+              <td>
+                <div className='cart-item-detail'>
+                    <img src={item.image} />
+                    {item.title}
+                </div>
+              </td>
+              <td>
+                {item.quantity}
+                <button onClick={() => dispatch({ type: 'QuantityIncrease', payload: item.id })}>+</button>
+                <button onClick={() => dispatch({ type: 'QuantityDecrease', payload: item.id })}>-</button>
+              </td>
+              <td>₹{item.price}</td>
+              <td>₹{item.quantity * item.price}</td>
+              <td><button onClick={() => dispatch({ type: 'REMOVE_FROM_CART', payload: item.id })}>Delete</button></td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colSpan={3}>Total</td>
+                <td>₹{state.cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}</td>
+                <td></td>
+            </tr>
+        </tfoot>
+      </table>
+      <div className='checkout-btn'>
+        <Link to="/checkout">Checkout</Link>
+      </div>
+    </div>
+  );
+};
+
+export default Cart;

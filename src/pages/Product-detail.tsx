@@ -1,12 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { fetchProductById } from '../services/productService';
 import type { Product } from '../types/Product';
-
-const fetchProductById = async (id: string): Promise<Product> => {
-  const res = await axios.get<Product>(`https://fakestoreapi.com/products/${id}`);
-  return res.data;
-};
+import { useCart } from '../context/CartContext';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -15,15 +11,18 @@ const ProductDetail = () => {
     queryFn: () => fetchProductById(id!),
   });
 
-  if (isLoading) return <p>Loading product...</p>;
+  const { dispatch } = useCart();
+
+  if (isLoading) return <p>Loading...</p>;
   if (error || !product) return <p>Product not found</p>;
 
   return (
-    <div className="container product-detail">
+    <div className="container">
       <h2>{product.title}</h2>
-      <img src={product.image} />
+      <img src={product.image} width="200" />
       <p>{product.description}</p>
-      <p>Price: ₹{product.price}</p>
+      <p>₹{product.price}</p>
+      <button onClick={() => dispatch({ type: 'ADD_TO_CART', payload: product })}>Add to Cart</button>
     </div>
   );
 };
