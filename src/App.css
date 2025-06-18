@@ -3,6 +3,10 @@ body {
   font-family: Arial, sans-serif;
 }
 
+*, *::before, *::after{
+  box-sizing: border-box;
+}
+
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -113,4 +117,62 @@ img{
   color: #fff;
   padding: 5px 10px;
   display: inline-block;
+}
+
+.login-form {
+    background: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    max-width: 384px;
+    margin: 0 auto;
+    box-shadow: 0 10px 15px 5px rgb(0 0 0 / 0.1);
+}
+
+.login-form h2{
+  font-size: 24px;
+  line-height: 32px;
+  margin-bottom: 24px;
+}
+
+.form-field label{
+  display: block;
+  margin: 0 0 8px;
+}
+
+.form-field input {
+  border: 1px solid rgb(209 213 219);
+  padding: 8px 16px;
+  width: 100%;
+  border-radius: 8px;
+  height: 42px;
+  font-size: 16px;
+}
+
+.form-field {
+    margin-bottom: 15px;
+}
+
+.login-form button[type="submit"]{
+  background: rgb(37 99 235);
+  display: block;
+  width: 100%;
+  border: none;
+  color: #fff;
+  padding: 11px 0;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.user-info {
+    display: inline-flex;
+}
+
+nav .container{
+  display: flex;
+  align-items: center;
+}
+
+.error-message{
+  color: red;
 }
