@@ -12,8 +12,9 @@ const Home = () => {
 
   const { dispatch } = useCart();
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error loading products</p>;
+  if (isLoading) return <div className="container"><p>Loading...</p></div>;
+  if (error) return <div className="container"><p>Error loading products</p></div>;
+
 
   return (
     <div className="container">
@@ -28,7 +29,9 @@ const Home = () => {
         ))}
       </div>
     </div>
-  );
+  )
+
+  
 };
 
 export default Home;
