@@ -31,7 +31,7 @@ const Login = () => {
 
   // 7. Handle form submit
   const onSubmit = (data: LoginFormInputs) => {
-    login({ name: data.name, email: data.email });  // 8. Call login function
+    login({ name: data.name, email: data.email, isAdmin: true  });  // 8. Call login function
     navigate("/");                                  // 9. Redirect to home
   };
 

@@ -176,3 +176,18 @@ nav .container{
 .error-message{
   color: red;
 }
+
+.searchbar{
+  margin: 0 0 30px;
+}
+
+.searchbar input{
+  height: 36px;
+  border: 1px solid #ebebeb;
+  padding: 10px 15px;
+  color: #000;
+}
+
+.searchbar input:focus{
+  outline: none;
+}

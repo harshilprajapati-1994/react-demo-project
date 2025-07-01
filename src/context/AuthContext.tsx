@@ -2,7 +2,8 @@ import { createContext, useContext, useEffect, useReducer } from "react"
 
 type User = {
     name: string,
-    email: string
+    email: string,
+    isAdmin: boolean
 }
 
 type AuthState = {

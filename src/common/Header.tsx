@@ -18,6 +18,20 @@ const Header = () => {
                     <li>
                         <Link to="/cart">Cart </Link>
                     </li>
+                    {state.isAuthenticated && state.user?.isAdmin && (
+                    <li>
+                        <Link to="/admin/products">Admin</Link>
+                    </li>
+                    )}
+                    {state.isAuthenticated && (
+                        <li>
+                            <Link to="/orders">My Orders</Link>
+                        </li>
+                    
+                    )}
+                    {state.isAuthenticated && state.user?.isAdmin && (
+                    <Link to="/admin/add">Add Product</Link>
+                    )}
                 </ul>
                 {state.isAuthenticated ? (
                     <div className="user-info">
