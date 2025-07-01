@@ -4,9 +4,7 @@ import { Link } from 'react-router-dom';
 const Cart = () => {
   const { state, dispatch } = useCart();
 
-  if (state.cartItems.length === 0) return <p>No items in cart</p>;
-
-  console.log(state.cartItems)
+  if (state.cartItems.length === 0) return <div className="container"><p>No items in cart</p></div>;
 
   return (
     <div className="container">

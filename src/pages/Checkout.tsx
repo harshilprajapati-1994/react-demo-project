@@ -1,36 +1,43 @@
-import { useCart } from '../context/CartContext';
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-
-// Define cart item
-type CartItem = {
-  id: number;
-  title: string;
-  price: number;
-  quantity: number;
-};
+import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
+import { useMutation } from "@tanstack/react-query";
+import { placeOrder } from "../services/orderServices";
+import { useNavigate } from "react-router-dom";
+import type { CartItem } from "../types/Product";
 
 const Checkout = () => {
   const { state, dispatch } = useCart();
+  const { state: authState } = useAuth();
   const navigate = useNavigate();
 
-  const mutation = useMutation<void, Error, CartItem[]>({
-    mutationFn: async (cartData) => {
-      await axios.post('https://jsonplaceholder.typicode.com/posts', cartData);
-    },
-    onSuccess: () => {
-      dispatch({ type: 'CLEAR_CART' });
-      localStorage.removeItem('cart');
-      navigate('/success');
-    },
-  });
+  
+const mutation = useMutation({
+  mutationFn: (orderData: { email: string; items: CartItem[] }) =>
+    placeOrder(orderData),
+  onSuccess: () => {
+    dispatch({ type: "CLEAR_CART" });
+    localStorage.removeItem("cart");
+    navigate("/orders");
+  },
+});
+
+  const handlePlaceOrder = () => {
+    if (!authState.user) {
+      alert("You need to be logged in to place an order.");
+      return;
+    }
+
+    mutation.mutate({
+      email: authState.user.email,
+      items: state.cartItems,
+    });
+  };
 
   return (
     <div className="container">
       <h2>Checkout</h2>
-      <p>₹{state.cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}</p>
-      <button onClick={() => mutation.mutate(state.cartItems)}>Place Order</button>
+      <p>Total Items: {state.cartItems.length}</p>
+      <button onClick={handlePlaceOrder}>Place Order</button>
     </div>
   );
 };
